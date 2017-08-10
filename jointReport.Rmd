@@ -12,7 +12,7 @@ output:
 #### Pilot: Gustav Nilsonne
 #### Co-pilot: Kyle MacDonald
 #### Start date: 07/13/2017
-#### End date: TBD
+#### End date: 8/10/2017
 
 -------
 
@@ -50,7 +50,7 @@ library(compute.es) # To get effect sizes for t-tests
 ## Step 2: Load data
 
 ```{r}
-data <- read_xlsx("~/GitHub/set_sDcDq/data/data.xlsx") # This reads sheet 1, which is the right one for experiment 1
+data <- read_xlsx("data/data.xlsx") # This reads sheet 1, which is the right one for experiment 1
 ```
 
 ## Step 3: Tidy data
@@ -107,46 +107,59 @@ compareValues(0.326, anova[[1]]$p[1])
 # Compare effect size values
 compareValues(0.39, anova[[1]]$ges[2])
 compareValues(0.07, anova[[1]]$ges[3])
-
 ```
 
 > Follow-up analyses indicated that the difference between the conditions emerged in both age groups: 3-year-olds, t(38) = 2.82, p = 0.008, d = 0.91; 4-year-olds, t(38) = 8.05, p < 0.001, d = 2.61. These analyses also revealed that the interaction between age and condition resulted from children at both ages indicating the worse toy at similar rates in the no-action condition, t(38) = 1.08, p = 0.288, but 4-year-olds indicating it more than 3-year-olds in the action condition, t(38) = −2.08, p = 0.044, d = 0.67.
 
+Perform t-tests
+
 ```{r}
-# Perform t-tests
 test1 <- t.test(data$score[data$age == 3 & data$condition == 1], data$score[data$age == 3 & data$condition == 2], var.equal=T)
 test2 <- t.test(data$score[data$age == 4 & data$condition == 1], data$score[data$age == 4 & data$condition == 2], var.equal=T)
 test3 <- t.test(data$score[data$age == 3 & data$condition == 2], data$score[data$age == 4 & data$condition == 2], var.equal=T)
 test4 <- t.test(data$score[data$age == 3 & data$condition == 1], data$score[data$age == 4 & data$condition == 1], var.equal=T)
+```
 
-# Compare degrees of freedom
+Compare degrees of freedom
+
+```{r}
 compareValues(38, test1$parameter)
 compareValues(38, test2$parameter)
 compareValues(38, test3$parameter)
 compareValues(38, test4$parameter)
+```
 
 # Compare t values
+
+```{r}
 compareValues(2.82, test1$statistic)
 compareValues(8.05, test2$statistic)
 compareValues(1.08, test3$statistic)
 compareValues(-2.08, test4$statistic)
+```
 
-# Compare p values
+Compare p values
+
+```{r}
 compareValues(0.008, test1$p.value, isP = T)
 test2$p.value
 # < 0.001 and 7.077984e-09 - MATCH
 compareValues(0.288, test3$p.value, isP = T)
 compareValues(0.044, test4$p.value, isP = T)
+```
 
-# Compare d values
-d1 <- tes(t = test1$statistic, n.1 = length(data$score[data$age == 3 & data$condition == 1]), n.2 = length(data$score[data$age == 3 & data$condition == 2]))
+Compare d values
+
+```{r}
+d1 <- tes(t = test1$statistic, n.1 = length(data$score[data$age == 3 & data$condition == 1]), 
+          n.2 = length(data$score[data$age == 3 & data$condition == 2]))
 compareValues(0.91, d1$d)
-d2 <- tes(t = test2$statistic, n.1 = length(data$score[data$age == 4 & data$condition == 1]), n.2 = length(data$score[data$age == 4 & data$condition == 2]))
-compareValues(2.61, d2$d)
-# d3 is not reported
+
+
 d2 <- tes(t = test2$statistic, n.1 = length(data$score[data$age == 4 & data$condition == 1]), n.2 = length(data$score[data$age == 4 & data$condition == 2]))
 compareValues(2.61, d2$d)
 
+# d3 is not reported
 ```
 
 ## Step 5: Conclusion
@@ -157,7 +170,7 @@ codReport(Report_Type = 'joint',
           Insufficient_Information_Errors = 0,
           Decision_Errors = 0, 
           Major_Numerical_Errors = 0, 
-          Minor_Numerical_Errors = 6)
+          Minor_Numerical_Errors = 3)
 ```
 
 Replications of analyses were broadly successful. Minor errors could be due to different software implementations etc.
