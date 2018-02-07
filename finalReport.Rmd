@@ -150,7 +150,7 @@ reportObject <- compareValues2("38", test3$parameter, valueType = 'df')
 reportObject <- compareValues2("38", test4$parameter, valueType = 'df')
 ```
 
-# Compare t values
+Compare t values
 
 ```{r}
 reportObject <- compareValues2("2.82", test1$statistic, valueType = 't')
